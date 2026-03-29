@@ -45,14 +45,6 @@ export const addTask = (tasks, title) => {
   ];
 };
 
-export function sortTasks(tasks) {
-  const pending = tasks.filter(function(task) {
-    return task.completed === false;
-  });
-  
-  const completed = tasks.filter(function(task) {
-    return task.completed === true;
-  });
-  
-  return pending.concat(completed);
+export const sortTasks = (tasks) => {
+  return [...tasks].sort((a, b) => Number(a.completed) - Number(b.completed));
 };
