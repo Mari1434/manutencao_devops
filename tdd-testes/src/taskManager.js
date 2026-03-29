@@ -11,20 +11,8 @@ export const filterTasks = (tasks, status) => {
   }
 };
 
-export function countTasks(tasks) {
-  return tasks.length;
-}
+export const countTasks = (tasks) => tasks.length;
 
-export function countCompleted(tasks) {
-  const completedTasks = tasks.filter(function(task) {
-    return task.completed === true;
-  });
-  return completedTasks.length;
-}
+export const countCompleted = (tasks) => tasks.filter(task => task.completed === true).length;
 
-export function countPending(tasks) {
-  const pendingTasks = tasks.filter(function(task) {
-    return task.completed === false;
-  });
-  return pendingTasks.length;
-}
+export const countPending = (tasks) => tasks.filter(task => task.completed === false).length;
