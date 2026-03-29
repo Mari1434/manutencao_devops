@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { removeTask, filterTasks, countTasks, countCompleted, countPending, createTask, validatePriority, filterByPriority, isDuplicate, addTask, sortTasks } from '../src/taskManager.js';
+import { removeTask, filterTasks, countTasks, countCompleted, countPending, createTask, validatePriority, filterByPriority, isDuplicate, addTask, sortTasks, searchTasks } from '../src/taskManager.js';
 
 describe('Função removeTask', () => {
   const tarefas = [
@@ -268,5 +268,43 @@ describe('Função sortTasks', () => {
     const result = sortTasks(mixedTasks);
     expect(result).not.toBe(mixedTasks);
     expect(mixedTasks[0].id).toBe(1); 
+  });
+});
+
+describe('Função searchTasks', () => {
+  const tasks = [
+    { id: 1, title: 'Estudar Vitest' },
+    { id: 2, title: 'Testar o código' },
+    { id: 3, title: 'Beber café' }
+  ];
+
+  it('Deve encontrar tarefas cujo título contenha a query', () => {
+    const result = searchTasks(tasks, 'est');
+    expect(result).toHaveLength(2);
+    expect(result[0].title).toBe('Estudar Vitest');
+    expect(result[1].title).toBe('Testar o código');
+  });
+
+  it('Deve funcionar ignorando maiúsculas e minúsculas', () => {
+    const result = searchTasks(tasks, 'EST');
+    expect(result).toHaveLength(2);
+    expect(result[0].title).toBe('Estudar Vitest');
+    expect(result[1].title).toBe('Testar o código');
+  });
+
+  it('Deve retornar um array vazio se não houver nenhuma correspondência', () => {
+    const result = searchTasks(tasks, 'xyz');
+    expect(result).toEqual([]);
+  });
+
+  it('Deve retornar um array vazio se a lista de tarefas for vazia', () => {
+    const result = searchTasks([], 'algo');
+    expect(result).toEqual([]);
+  });
+
+  it('Deve retornar todas as tarefas se a query for uma string vazia', () => {
+    const result = searchTasks(tasks, '');
+    expect(result).toHaveLength(3);
+    expect(result).toEqual(tasks);
   });
 });
