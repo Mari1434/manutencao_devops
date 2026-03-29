@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { removeTask, filterTasks, countTasks, countCompleted, countPending } from '../src/taskManager.js';
+import { removeTask, filterTasks, countTasks, countCompleted, countPending, createTask, validatePriority, filterByPriority } from '../src/taskManager.js';
 
 describe('Função removeTask', () => {
   const tarefas = [
@@ -131,6 +131,59 @@ describe('Funções de Contagem', () => {
 
     it('Deve retornar 0 quando não houver nenhuma tarefa pendente', () => {
       expect(countPending(allCompletedTasks)).toBe(0);
+    });
+  });
+});
+
+describe('Funcionalidades de Prioridade', () => {
+  
+  describe('createTask', () => {
+    it('Deve criar uma tarefa com a prioridade fornecida', () => {
+      const task = createTask('Estudar Vitest', 'high');
+      expect(task).toHaveProperty('title', 'Estudar Vitest');
+      expect(task).toHaveProperty('priority', 'high');
+    });
+
+    it('Deve criar uma tarefa com prioridade "medium" por padrão', () => {
+      const task = createTask('Fazer commits RED');
+      expect(task).toHaveProperty('priority', 'medium');
+    });
+  });
+
+  describe('validatePriority', () => {
+    it('Deve retornar true para prioridades válidas', () => {
+      expect(validatePriority('low')).toBe(true);
+      expect(validatePriority('medium')).toBe(true);
+      expect(validatePriority('high')).toBe(true);
+    });
+
+    it('Deve retornar false para prioridades inválidas', () => {
+      expect(validatePriority('urgente')).toBe(false);
+      expect(validatePriority('')).toBe(false);
+    });
+  });
+
+  describe('filterByPriority', () => {
+    const tasks = [
+      { id: 1, title: 'Tarefa 1', priority: 'high' },
+      { id: 2, title: 'Tarefa 2', priority: 'medium' },
+      { id: 3, title: 'Tarefa 3', priority: 'high' },
+      { id: 4, title: 'Tarefa 4', priority: 'low' }
+    ];
+
+    it('Deve retornar apenas as tarefas com a prioridade especificada', () => {
+      const highPriorityTasks = filterByPriority(tasks, 'high');
+      
+      expect(highPriorityTasks).toHaveLength(2);
+      expect(highPriorityTasks).toEqual([
+        { id: 1, title: 'Tarefa 1', priority: 'high' },
+        { id: 3, title: 'Tarefa 3', priority: 'high' }
+      ]);
+    });
+
+    it('Deve retornar um array vazio se nenhuma tarefa tiver a prioridade especificada', () => {
+      const urgentTasks = filterByPriority(tasks, 'urgente');
+      expect(urgentTasks).toEqual([]);
     });
   });
 });
