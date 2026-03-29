@@ -10,3 +10,21 @@ export const filterTasks = (tasks, status) => {
       return [...tasks]; 
   }
 };
+
+export function countTasks(tasks) {
+  return tasks.length;
+}
+
+export function countCompleted(tasks) {
+  const completedTasks = tasks.filter(function(task) {
+    return task.completed === true;
+  });
+  return completedTasks.length;
+}
+
+export function countPending(tasks) {
+  const pendingTasks = tasks.filter(function(task) {
+    return task.completed === false;
+  });
+  return pendingTasks.length;
+}
