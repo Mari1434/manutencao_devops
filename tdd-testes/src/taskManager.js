@@ -1,19 +1,12 @@
 export const removeTask = (tasks, taskId) => tasks.filter(task => task.id !== taskId);
 
-export function filterTasks(tasks, status) {
+export const filterTasks = (tasks, status) => {
   switch (status) {
     case 'completed':
-      return tasks.filter(function(task) {
-        return task.status === 'completed';
-      });
+      return tasks.filter(task => task.status === 'completed');
     case 'pending':
-      return tasks.filter(function(task) {
-        return task.status === 'pending';
-      });
-    case 'all':
+      return tasks.filter(task => task.status === 'pending');
     default:
-      return tasks.filter(function() {
-        return true; 
-      });
+      return [...tasks]; 
   }
-}
+};
