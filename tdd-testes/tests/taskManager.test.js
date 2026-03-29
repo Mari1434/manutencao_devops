@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { removeTask, filterTasks, countTasks, countCompleted, countPending, createTask, validatePriority, filterByPriority } from '../src/taskManager.js';
+import { removeTask, filterTasks, countTasks, countCompleted, countPending, createTask, validatePriority, filterByPriority, isDuplicate, addTask } from '../src/taskManager.js';
 
 describe('Função removeTask', () => {
   const tarefas = [
@@ -184,6 +184,44 @@ describe('Funcionalidades de Prioridade', () => {
     it('Deve retornar um array vazio se nenhuma tarefa tiver a prioridade especificada', () => {
       const urgentTasks = filterByPriority(tasks, 'urgente');
       expect(urgentTasks).toEqual([]);
+    });
+  });
+});
+
+describe('Prevenção de tarefas duplicadas', () => {
+  const tasks = [
+    { id: 1, title: 'Estudar', completed: false },
+    { id: 2, title: 'Fazer exercícios', completed: false }
+  ];
+
+  describe('isDuplicate', () => {
+    it('Deve retornar true se já existe uma tarefa com o mesmo título exato', () => {
+      expect(isDuplicate(tasks, 'Estudar')).toBe(true);
+    });
+
+    it('Deve retornar true ignorando maiúsculas e minúsculas', () => {
+      expect(isDuplicate(tasks, 'estudar')).toBe(true);
+      expect(isDuplicate(tasks, 'ESTUDAR')).toBe(true);
+    });
+
+    it('Deve retornar true ignorando espaços extras antes ou depois do título', () => {
+      expect(isDuplicate(tasks, '  Estudar  ')).toBe(true);
+    });
+
+    it('Deve retornar false para um título diferente', () => {
+      expect(isDuplicate(tasks, 'Trabalhar')).toBe(false);
+    });
+  });
+
+  describe('addTask', () => {
+    it('Deve lançar um erro quando tentar adicionar uma tarefa duplicada', () => {
+      expect(() => addTask(tasks, 'estudar')).toThrow('Tarefa já existe');
+    });
+
+    it('Deve adicionar a tarefa com sucesso se não for duplicada', () => {
+      const result = addTask(tasks, 'Trabalhar');
+      expect(result).toHaveLength(3);
+      expect(result[2].title).toBe('Trabalhar');
     });
   });
 });
