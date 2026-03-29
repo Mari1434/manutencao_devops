@@ -44,3 +44,15 @@ export const addTask = (tasks, title) => {
     { id: Date.now(), title: title.trim(), completed: false }
   ];
 };
+
+export function sortTasks(tasks) {
+  const pending = tasks.filter(function(task) {
+    return task.completed === false;
+  });
+  
+  const completed = tasks.filter(function(task) {
+    return task.completed === true;
+  });
+  
+  return pending.concat(completed);
+};
