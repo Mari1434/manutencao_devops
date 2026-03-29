@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { removeTask, filterTasks, countTasks, countCompleted, countPending, createTask, validatePriority, filterByPriority, isDuplicate, addTask } from '../src/taskManager.js';
+import { removeTask, filterTasks, countTasks, countCompleted, countPending, createTask, validatePriority, filterByPriority, isDuplicate, addTask, sortTasks } from '../src/taskManager.js';
 
 describe('Função removeTask', () => {
   const tarefas = [
@@ -223,5 +223,50 @@ describe('Prevenção de tarefas duplicadas', () => {
       expect(result).toHaveLength(3);
       expect(result[2].title).toBe('Trabalhar');
     });
+  });
+});
+
+describe('Função sortTasks', () => {
+  const mixedTasks = [
+    { id: 1, title: 'Tarefa A', completed: true },
+    { id: 2, title: 'Tarefa B', completed: false },
+    { id: 3, title: 'Tarefa C', completed: true },
+    { id: 4, title: 'Tarefa D', completed: false }
+  ];
+
+  it('Deve ordenar a lista em pendentes primeiro, concluídas depois', () => {
+    const result = sortTasks(mixedTasks);
+    expect(result).toEqual([
+      { id: 2, title: 'Tarefa B', completed: false },
+      { id: 4, title: 'Tarefa D', completed: false },
+      { id: 1, title: 'Tarefa A', completed: true },
+      { id: 3, title: 'Tarefa C', completed: true }
+    ]);
+  });
+
+  it('Deve manter a ordem original se a lista tiver apenas tarefas pendentes', () => {
+    const onlyPending = [
+      { id: 1, title: 'Tarefa A', completed: false },
+      { id: 2, title: 'Tarefa B', completed: false }
+    ];
+    expect(sortTasks(onlyPending)).toEqual(onlyPending);
+  });
+
+  it('Deve manter a ordem original se a lista tiver apenas tarefas concluídas', () => {
+    const onlyCompleted = [
+      { id: 1, title: 'Tarefa A', completed: true },
+      { id: 2, title: 'Tarefa B', completed: true }
+    ];
+    expect(sortTasks(onlyCompleted)).toEqual(onlyCompleted);
+  });
+
+  it('Deve retornar um array vazio se a lista original for vazia', () => {
+    expect(sortTasks([])).toEqual([]);
+  });
+
+  it('Deve retornar um novo array', () => {
+    const result = sortTasks(mixedTasks);
+    expect(result).not.toBe(mixedTasks);
+    expect(mixedTasks[0].id).toBe(1); 
   });
 });
