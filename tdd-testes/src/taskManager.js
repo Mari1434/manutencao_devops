@@ -49,15 +49,8 @@ export const sortTasks = (tasks) => {
   return [...tasks].sort((a, b) => Number(a.completed) - Number(b.completed));
 };
 
-export function searchTasks(tasks, query) {
-  if (query === '') {
-    return tasks;
-  }
-
-  return tasks.filter(function(task) {
-    const tituloMinusculo = task.title.toLowerCase();
-    const queryMinuscula = query.toLowerCase();
-    
-    return tituloMinusculo.includes(queryMinuscula);
-  });
-}
+export const searchTasks = (tasks, query) => {
+  const normalizedQuery = query.toLowerCase();
+  
+  return tasks.filter(task => task.title.toLowerCase().includes(normalizedQuery));
+};
