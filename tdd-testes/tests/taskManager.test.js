@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { removeTask, filterTasks } from '../src/taskManager.js';
+import { removeTask, filterTasks, countTasks, countCompleted, countPending } from '../src/taskManager.js';
 
 describe('Função removeTask', () => {
   const tarefas = [
@@ -80,5 +80,57 @@ describe('Função filterTasks', () => {
     const resultDefault = filterTasks(tarefas, 'desconhecido');
     expect(resultAll).not.toBe(tarefas);
     expect(resultDefault).not.toBe(tarefas);
+  });
+});
+
+describe('Funções de Contagem', () => {
+  const tasks = [
+    { id: 1, title: 'Estudar Vitest', completed: true },
+    { id: 2, title: 'Fazer commits RED', completed: false },
+    { id: 3, title: 'Beber água', completed: false }
+  ];
+
+  const allCompletedTasks = [
+    { id: 1, title: 'Tarefa 1', completed: true },
+    { id: 2, title: 'Tarefa 2', completed: true }
+  ];
+
+  describe('countTasks', () => {
+    it('Deve retornar o total de tarefas', () => {
+      expect(countTasks(tasks)).toBe(3);
+    });
+
+    it('Deve retornar 0 se a lista for vazia', () => {
+      expect(countTasks([])).toBe(0);
+    });
+  });
+
+  describe('countCompleted', () => {
+    it('Deve retornar apenas a quantidade de tarefas concluídas', () => {
+      expect(countCompleted(tasks)).toBe(1);
+    });
+
+    it('Deve retornar 0 se a lista for vazia', () => {
+      expect(countCompleted([])).toBe(0);
+    });
+
+    it('Deve retornar 0 quando não houver nenhuma tarefa concluída', () => {
+      const onlyPending = [{ id: 1, completed: false }];
+      expect(countCompleted(onlyPending)).toBe(0);
+    });
+  });
+
+  describe('countPending', () => {
+    it('Deve retornar apenas a quantidade de tarefas pendentes', () => {
+      expect(countPending(tasks)).toBe(2);
+    });
+
+    it('Deve retornar 0 se a lista for vazia', () => {
+      expect(countPending([])).toBe(0);
+    });
+
+    it('Deve retornar 0 quando não houver nenhuma tarefa pendente', () => {
+      expect(countPending(allCompletedTasks)).toBe(0);
+    });
   });
 });
