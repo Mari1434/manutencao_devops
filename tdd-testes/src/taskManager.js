@@ -16,3 +16,31 @@ export const countTasks = (tasks) => tasks.length;
 export const countCompleted = (tasks) => tasks.filter(task => task.completed === true).length;
 
 export const countPending = (tasks) => tasks.filter(task => task.completed === false).length;
+
+export function createTask(title, priority) {
+  let finalPriority = priority;
+  
+  if (priority === undefined) {
+    finalPriority = 'medium';
+  }
+
+  return {
+    id: Date.now(),
+    title: title,
+    priority: finalPriority,
+    completed: false
+  };
+}
+
+export function validatePriority(priority) {
+  if (priority === 'low' || priority === 'medium' || priority === 'high') {
+    return true;
+  }
+  return false;
+}
+
+export function filterByPriority(tasks, priority) {
+  return tasks.filter(function(task) {
+    return task.priority === priority;
+  });
+}
