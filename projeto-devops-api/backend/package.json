@@ -1,0 +1,13 @@
+{
+"name": "api-devops",
+"version": "1.0.0",
+"description": "API simples para prática DevOps com Docker",
+"main": "app.js",
+"scripts": {
+"start": "node app.js"
+},
+"dependencies": {
+"express": "^4.18.2",
+"mongoose": "^7.0.0"
+}
+}
